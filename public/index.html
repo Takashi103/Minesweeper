@@ -7,11 +7,54 @@
     <title>Our web page is working!</title>
 
     <!--Error message to indicate why the game isn't working-->
-    <noscript>For some reason, this browser does not support Javascript</noscript>
-  
+
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-    <script src="Minesweeper.js" type="text/javascript">setup();</script>
+
+	<script>
+	window.onload = function() {
+	
+		socket = io.connect('http://localhost:3000');
+
+		var blankTile;
+		blankTile = new Image();
+		blankTile.src = "/images/blank.gif";
+
+		var c = document.getElementById("myCanvas");
+		drawGrid(c, blankTile);
+		
+	
+	};
+
+	function drawGrid(c, tile) 
+	{
+		console.log("Drawcanvas has been called");
+		
+		var tileWidth = tile.naturalWidth;
+		var tileHeight = tile.naturalHeight;
+		var rows = Math.floor(c.height / tileHeight);
+		var columns = Math.floor(c.width / tileWidth);
+		
+		console.log("tileWidth is " + tileWidth);
+		console.log("columns is " + columns);
+		console.log("tileHeight is " + tileHeight);
+		console.log("rows is " + rows);
+		
+		context = c.getContext("2d");
+		for(var i = 0; i < columns; i++)
+			for(var j = 0; j < rows; j++) {
+				var x = i * tileWidth;
+				var y = j * tileHeight;
+				context.drawImage(tile, x, y);
+			}
+	}
+	</script>
+  
+    
   </head>
 <body>
+
+    <noscript>For some reason, this browser does not support Javascript</noscript>
+	<canvas id="myCanvas" width="200" height="100" style="border:1px solid #000000;"></canvas>
+	
 </body>
 </html>
