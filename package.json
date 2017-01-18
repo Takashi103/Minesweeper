@@ -8,10 +8,12 @@
     "url": "https://github.com/Takashi103/Minesweeper"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "author": "Takashi",
+  "contributors": [
+    "Mauve Ranger"
+  ],
   "license": "ISC",
   "dependencies": {
     "express": "^4.14.0",
