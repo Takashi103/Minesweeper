@@ -17,35 +17,41 @@
 
 		var blankTile;
 		blankTile = new Image();
-		blankTile.src = "/images/blank.gif";
-
-		var c = document.getElementById("myCanvas");
-		drawGrid(c, blankTile);
 		
-	
+		//I had some problems with the code rolling forwards without the image loading first.
+		//The image size would be returned as zero, and the code would try to draw infinite tiles.
+		//And that's bad.
+		
+		//This sets it up so's the drawGrid method gets called once the image FINISHES loading.
+		blankTile.onload = function (){
+			//Obviously, the first argument is the canvas, and the second is the image itself.
+			drawGrid(document.getElementById("myCanvas"), this);
+		};
+
+		//Load the image. onLoad() is triggered once the image is present, and calls drawGrid().
+		blankTile.src = "/images/blank.gif";
 	};
 
 	function drawGrid(c, tile) 
 	{
-		console.log("Drawcanvas has been called");
-		
+		//console.log("drawGrid has been called");
 		var tileWidth = tile.naturalWidth;
 		var tileHeight = tile.naturalHeight;
-		var rows = Math.floor(c.height / tileHeight);
-		var columns = Math.floor(c.width / tileWidth);
 		
-		console.log("tileWidth is " + tileWidth);
-		console.log("columns is " + columns);
-		console.log("tileHeight is " + tileHeight);
-		console.log("rows is " + rows);
+		//These can tell you if the image is loaded or not.
+		//If you're having problems with missing tiles, uncomment them and check that they're not zero or whatever.
+
+		//console.log("tileWidth is " + tileWidth);
+		//console.log("tileHeight is " + tileHeight);
 		
 		context = c.getContext("2d");
-		for(var i = 0; i < columns; i++)
-			for(var j = 0; j < rows; j++) {
-				var x = i * tileWidth;
-				var y = j * tileHeight;
+	
+		for(var y = 0; y < c.height; y += tileHeight) {		//Draw rows until all rows full
+			for(var x = 0; x < c.width; x += tileWidth) {	//Draw tiles until row is full
 				context.drawImage(tile, x, y);
 			}
+		}
+		//console.log("drawGrid has closed successfully");
 	}
 	</script>
   
@@ -53,7 +59,7 @@
   </head>
 <body>
 
-    <noscript>For some reason, this browser does not support Javascript</noscript>
+	<noscript><p>For some reason, this browser does not support Javascript.</p><p>N00B.</p></noscript>
 	<canvas id="myCanvas" width="200" height="100" style="border:1px solid #000000;"></canvas>
 	
 </body>
