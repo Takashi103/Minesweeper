@@ -3,16 +3,33 @@ Takashi: js file for server
 */
 
 var express = require('express');
-
 var app = express();
-var server = app.listen(3000);
 
 app.use(express.static('public'));
 
-var io = require('socket.io')(server);
-
-io.sockets.on('connection', function newConnection(socket) {
-	console.log("new client with id: " + socket.id);
+var server = app.listen(3000, function(){
+	console.log('listening on port 3000');
 });
 
-console.log("Server is Running!");
+var io = require('socket.io')(server);
+
+//--------------------------------------------
+
+var rows = 10;
+var cols = 10;
+
+/*
+var grid = new Array(cols);
+for (var i = 0; i < cols; i++) {
+  grid[i] = new Array(rows);
+}*/
+
+io.on('connection', function(socket){
+	console.log('new user connected with id: ' + socket.id);
+	socket.emit('settings', rows, cols);
+
+	socket.on('tileClick', function(x, y) {
+		console.log('Click recieved at: ' + x +', ' + y);
+	});
+
+});
