@@ -1,0 +1,49 @@
+
+This is just a list of stuff that we can work out about the languages and stuff. Nothing specific to the project.
+Stuff I'm not sure of is '+' and stuff I haven't tested is '*'
+
+On javascript:
+
+On the syntax: Mostly like java.
+
+Lines end in semicolons.
+
+Arrays and variables
+You make a variable by saying "var (varname);" or "var lenny = 12;". Any variable can point to anything, including a number, a string, another variable, an object, a funciton, or an array. You declare an array as [], and you can make an array with twelve cells by saying [3 * 4]. An array variable gets an array like "var bill = [12, 14, "oranges", function emptyFunction() {}];" You can add elements to an array by doing stuff like "meats[14] = "unicorn";" even if meats[14] hasn't been made yet.
+
+Methods/Functions
+You use methods (they call them "functions") by putting parentheses around the arguments ("dankMemes(dankness, meme[0] + meme[4]);"). Methods can wrap around each other ("dankMemes(getDankness(), getMemes(0, 4));" Methods are made like "
+
+function damn(counter) {
+	for(i = 0; i < counter; i++)
+		console.log("dammit!");
+}
+
+" They are not run unless they are explicitly called from elsewhere. So if you make a method in the middle of the rest of your code, it won't get executed just because it's in line with the rest.
+
+Automatic Type Conversion: weird. You can use pretty much any operator with any variable, and they'll all work. Rules :
+
+Booleans:
+Anything that's a zero or contains no data becomes false.
+Anything that's not zero or contains data* (like the string "hello!") becomes true.
+
+Strings:
+Adding strings to other strings combines them.
+Adding numbers will change the number into a string, and attach it to the other string.
+Other number operations try to convert the string into a number. If the string isn't made of digits, it becomes Nan (not a number, which is different from null). If it's made of digits, it becomes a number and the operation continues.
+
+Numbers:
+Boolean true becomes 1, false becomes 0.
+See strings for their rules.
+
+Examples:
+8 * null
+0
+"5" - 1
+4
+"5" + 1
+51
+"five" * 2
+NaN
+false == 0
+true

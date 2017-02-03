@@ -1,0 +1,22 @@
+{
+  "name": "minesweeper",
+  "version": "1.0.0",
+  "description": "Multiplayer Minesweeper",
+  "main": "Minesweeper.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Takashi103/Minesweeper"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Takashi",
+  "contributors": [
+    "Mauve Ranger"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0",
+    "socket.io": "^1.7.2"
+  }
+}
