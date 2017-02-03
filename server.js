@@ -55,7 +55,7 @@ io.on('connection', function(socket){
 			var myCreation = {};
 			myCreation.data = new Array(1);
 			myCreation.data[0] = new Tile(x, y, 9);
-			console.log("myCreation: " + myCreation.data[0].x + ", " + myCreation.data[0].y + ", " + myCreation.data[0].content);
+			console.log("bombtile clicked at: " + myCreation.data[0].x + ", " + myCreation.data[0].y + ", " + myCreation.data[0].content);
 			this.emit('boardupdate', myCreation);
 		}
 	});

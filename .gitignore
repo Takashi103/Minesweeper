@@ -1,0 +1,6 @@
+#Our external dependencies
+node_modules
+
+#Backup files made by gedit--Used with Linux
+*~
+
