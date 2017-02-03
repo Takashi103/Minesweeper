@@ -5,7 +5,8 @@ Takashi: js file for server
 var rows = 10;
 var cols = 10;
 var mines = 30;
-var board;
+var board;			//These are intialized together
+var tileFlipper;	//This takes a reference to an initialized board
 
 //I don't know what this does but it doesn't work when I remove it
 var express = require('express');
@@ -42,20 +43,23 @@ for(var i = 0; i <= mines; i++) {
 	}
 }
 
+tileFlipper = new revealStack(cols, rows, board, function(tile){
+	console.log("Show tile at " + tile.x + ", " + tile.y);
+});
 
 io.on('connection', function(socket){
 	console.log('new user connected with id: ' + socket.id);
 	socket.emit('settings', rows, cols);
 	socket.on('tileClick', function(x, y) {
 		console.log('Click recieved at: ' + x +', ' + y);
-		if(board[x][y].content == 9)
-		{
-			var myCreation = {};
-			myCreation.data = new Array(1);
-			myCreation.data[0] = new Tile(x, y, 9);
-			console.log("bombtile clicked at: " + myCreation.data[0].x + ", " + myCreation.data[0].y + ", " + myCreation.data[0].content);
-			this.emit('boardupdate', myCreation);
-		}
+		
+		
+		
+		//This is the problem. For some reason, bigReveal is not getting the tile, I think?
+		tileFlipper.bigReveal(board[x][y]);
+		
+		
+		
 	});
 });
 
@@ -63,6 +67,7 @@ function Tile(x, y, content) {
 	this.x = x;
 	this.y = y;
 	this.content = content;
+	this.revealed = false;
 }
 
 
@@ -72,38 +77,12 @@ function Tile(x, y, content) {
 
 
 
-/*revealStack class definition
-untested
-
-I know JavaScript is a little more about functional and imperative programming than
-object oriented, but this is kind of complex and the encapsulation will do me good, I think.
-More experienced programmers may note that I'm not taking advantage of js's automatic
-variable-recording-at-time-of-call thingy or whatever. I don't know what that is.
-Maybe later.
-
-revealStack is an object intended to control revealing an area with contiguous blank tiles.
-Build an artificial stack using an array. New tiles are added at the end of the array,
-while tiles are revealed from the beginning of the array. This keeps the the maximum
-"stack" size down to the perimeter of the tileBoard, rather than its area, avoiding stack
-overflow with larger boards.
-
-To visualize it, the old, recursive way is a snake that reaches
-out to a corner, the follows the walls until it gets stuck, and
-each tile is another level on the stack, which is only redacted
-once the head of the snake gets stuck. That's a lot of
-recursion!
-
-The new way, based on making an array to represent unfinished business,
-is like water blooming outwards from the first tile. It hits the center,
-and only the boundary is recorded, forgetting the middle. It maintains a
-stack only as large as the perimeter of the spill. That's about O(n^0.5).
-*/
 
 //Supposed to return an object for revealing a contiguous block of blank tiles
 //                  (int,   int,    Tile[][], function )
-function revealStack(width, height, board, revealMethod) {
-	this.width = width;
-	this.height = height;
+function revealStack(cols, rows, board, revealMethod) {
+	this.cols = cols;
+	this.rows = rows;
 	this.board = board;
 
 	var revealMethod = revealMethod;	//External method that we call to reveal a given tile.
@@ -122,7 +101,7 @@ function revealStack(width, height, board, revealMethod) {
 		pushTile(workingTile);
 		//Loop: take a tile off the bottom of the array. Maybe put some tiles on top.
 		//Lather, rinse, repeat.
-		while(tilestack.length > 0)
+		while(tileStack.length > 0)
 		{
 			//Pull the next item from the stack
 			workingTile = tileStack.shift;
@@ -149,16 +128,20 @@ function revealStack(width, height, board, revealMethod) {
 		//Row below
 		pushTile(x - 1, y + 1);
 		pushTile(x, y + 1);
-		pushTile(x + 1, y + 1);		
+		pushTile(x + 1, y + 1);
 	};
 	var pushTile = function(x, y){
+		console.log("Pushtile has been called");
 		//Check that the tile is on the board
-		if(x >= 0 && y >= 0 && x < width && y < height)
+		console.log("The tile bounds are " + x + ", " + y);
+		if(x >= 0 && y >= 0 && x < cols && y < rows)
 		{
+			console.log("The tile is in bounds, " + x + ", " + y);
 			var tile = board[x][y];
 			//Check that the tile is not already on the stack
 			if(!tile.revealed)
 			{
+				console.log("The tile is not revealed, " + tile.revealed);
 				//Mark that the tile is being added to the stack
 				tile.revealed = true;
 				tileStack.push(tile);	//Add it to the end of the array
