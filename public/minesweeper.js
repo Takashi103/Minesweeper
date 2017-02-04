@@ -20,9 +20,10 @@ $(document).ready(function(){
 
 	tileImages = new Array(10);
 	for(var i = 0; i < tileImages.length; i++)
+	{
 		tileImages[i] = new Image();
-	
-	tileImages[9].src = "/images/bombdeath.gif";
+		tileImages[i].src = "/images/open" + i;
+	}
 	
 	//When we receive rows and columns from server, draw the grid.
     socket.on('settings', function (rows, cols) {
@@ -49,8 +50,8 @@ $(document).ready(function(){
 		for(var i = 0; i < data.length; i++)
 		{
 			drawTile(data[i]);
-			//if(data[i].content == 9)
-				//Lose points
+			if(data[i].content == 9)
+				//it's a mine; lose points
 		}
 		
 	});
