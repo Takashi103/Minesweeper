@@ -6,7 +6,6 @@ var rows = 10;
 var cols = 10;
 var mines = 30;
 var board;			//These are intialized together
-var tileFlipper;	//This takes a reference to an initialized board
 
 //I don't know what this does but it doesn't work when I remove it
 var express = require('express');
