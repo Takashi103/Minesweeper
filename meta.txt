@@ -6,6 +6,7 @@ var rows = 10;
 var cols = 10;
 var mines = 30;
 var board;			//These are intialized together
+var tileFlipper;	//This takes a reference to an initialized board
 
 //I don't know what this does but it doesn't work when I remove it
 var express = require('express');
@@ -44,15 +45,17 @@ for(var i = 0; i <= mines; i++) {
 
 for (var i = 0; i < cols; i++) {
 	for (var j = 0; j < rows; j++) {
+		if(board[i][j].content != 9) {
 
-		var sum;
-		var adjacentContent = nearbyMines(i, j);
+			var sum = 0;
+			var adjacentContent = nearbyMines(i, j);
 
-		for (var k = 0; k < adjacentContent.length; k++) {
-			if(adjacentContent[k] == 9)
-				sum++;
+			for (var k = 0; k < adjacentContent.length; k++) {
+				if(adjacentContent[k] == 9)
+					sum++;
+			}
+			board[i][j].content = sum;
 		}
-		board[i][j].content = sum;
 	}
 }
 
