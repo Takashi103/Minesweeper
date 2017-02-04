@@ -22,7 +22,7 @@ $(document).ready(function(){
 	for(var i = 0; i < tileImages.length; i++)
 	{
 		tileImages[i] = new Image();
-		tileImages[i].src = "/images/open" + i;
+		tileImages[i].src = "/images/open" + i + ".gif";
 	}
 	
 	//When we receive rows and columns from server, draw the grid.
@@ -46,11 +46,13 @@ $(document).ready(function(){
 	});
 
 	socket.on('boardupdate', function (args) {
+		console.log("This is boardupdate");
+		console.log("args.data.length = " + args.data.length);
 		var data = args.data;	//data should be an array of Tiles
 		for(var i = 0; i < data.length; i++)
 		{
 			drawTile(data[i]);
-			if(data[i].content == 9)
+			//if(data[i].content == 9)
 				//it's a mine; lose points
 		}
 		
