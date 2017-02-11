@@ -91,7 +91,7 @@ io.on('connection', function(socket){
 	socket.on('tileClick', function(x, y) {
 		console.log('Click recieved at: ' + x +', ' + y + ', Content = ' + board[x][y].content);
 		var revealedTiles = tileFlipper.bigReveal(board[x][y]);
-		socket.emit('boardupdate', {data: revealedTiles});
+		io.emit('boardupdate', {data: revealedTiles});
 	});
 });
 
