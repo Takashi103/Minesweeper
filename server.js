@@ -5,7 +5,7 @@ Takashi: js file for server
 //Declare variables here.
 var rows = 10;
 var cols = 10;
-var mines = 30;
+var mines = 50;
 var board;			//These are intialized together
 var tileFlipper;	//This takes a reference to an initialized board
 
