@@ -1,4 +1,3 @@
-
 /*
 Takashi: js file for server
 */
@@ -89,8 +88,7 @@ function nearbyMines(x, y) {
 
 io.on('connection', function(socket){
 	console.log('new user connected with id: ' + socket.id);
-	socket.emit('settings', rows, cols);
-	socket.emit('boardupdate', {data: tilesRevealed});
+	socket.emit('settings', rows, cols, {data: tilesRevealed});
 	socket.on('tileClick', function(x, y) {
 		console.log('Click recieved at: ' + x +', ' + y + ', Content = ' + board[x][y].content);
 		var revealedTiles = tileFlipper.bigReveal(board[x][y]);
