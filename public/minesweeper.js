@@ -9,7 +9,7 @@ var columns;			//Number of columns. Length of the x axis.
 
 var tileImages;			//Array of images.
 //0-8 correspond to neighbor counts on empty tiles
-//9 and 10 are mines (also corresponds with tile)
+//9 and 10 are mine (also corresponds with tile)
 
 $(document).ready(function(){
 	//Initialize variables.
@@ -26,8 +26,8 @@ $(document).ready(function(){
 	}
 	
 	//When we receive rows and columns from server, draw the grid.
-    socket.on('settings', function (rows, cols) {
-        console.log("Rows: " + rows + ' Columns: ' + cols);
+    socket.on('settings', function (rows, cols, dataObject) {
+        console.log("Settings: Rows: " + rows + ' Columns: ' + cols);
 		this.rows = rows;
 		this.columns = cols;
 		tileBoard.width = tileWidth * cols;
@@ -39,28 +39,35 @@ $(document).ready(function(){
 		blankTile = new Image();
 
 		blankTile.onload = function (){
+			console.log("Drawing first grid")
 			drawGrid(tileBoard, this);
+			console.log("First grid drawn");
+			console.log("Drawing first tiles");
+			boardUpdate(dataObject.data);
+			console.log("First tiles drawn");
 		};
 		blankTile.src = "/images/blank.gif";
-
 	});
 
 	socket.on('boardupdate', function (args) {
 		console.log("This is boardupdate");
 		console.log("args.data.length = " + args.data.length);
-		var data = args.data;	//data should be an array of Tiles
-		for(var i = 0; i < data.length; i++)
-		{
-			drawTile(data[i]);
-			//if(data[i].content == 9)
-				//it's a mine; lose points
-		}
-		
+		boardUpdate(args.data);
+		console.log("Boardupdate done");
 	});
 	
 	tileBoard.onclick = takeClick;
 
 });
+
+function boardUpdate(data)
+{
+	//data should be an array of Tiles
+	for(var i = 0; i < data.length; i++)
+	{
+		drawTile(data[i]);
+	}
+}
 	
 function takeClick(mouseEvent)
 {
