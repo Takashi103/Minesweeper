@@ -5,9 +5,10 @@ Takashi: js file for server
 //Declare variables here.
 var rows = 10;
 var cols = 10;
-var mines = 50;
+var mines = 20;
 var board;			//These are intialized together
 var tileFlipper;	//This takes a reference to an initialized board
+var tilesRevealed = new Array();
 
 //I don't know what this does but it doesn't work when I remove it
 var express = require('express');
@@ -33,7 +34,7 @@ for(var i = 0; i < board.length; i++)
 	for(var j = 0; j < board[i].length; j++)
 		board[i][j] = new Tile(i, j, 0);
 
-for(var i = 0; i <= mines; i++) {
+for(var i = 0; i < mines; i++) {
 	var a = Math.floor(Math.random() * rows);
 	var b = Math.floor(Math.random() * cols);
 	if(board[a][b].content == 9)
@@ -88,9 +89,11 @@ function nearbyMines(x, y) {
 io.on('connection', function(socket){
 	console.log('new user connected with id: ' + socket.id);
 	socket.emit('settings', rows, cols);
+	socket.emit('boardupdate', {data: tilesRevealed});
 	socket.on('tileClick', function(x, y) {
 		console.log('Click recieved at: ' + x +', ' + y + ', Content = ' + board[x][y].content);
 		var revealedTiles = tileFlipper.bigReveal(board[x][y]);
+		tilesRevealed.push.apply(tilesRevealed, revealedTiles);
 		io.emit('boardupdate', {data: revealedTiles});
 	});
 });
