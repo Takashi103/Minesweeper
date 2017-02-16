@@ -9,7 +9,7 @@ var columns;			//Number of columns. Length of the x axis.
 
 var tileImages;			//Array of images.
 //0-8 correspond to neighbor counts on empty tiles
-//9 is a mine (also corresponds with tile)
+//9 and 10 are mines (also corresponds with tile)
 
 $(document).ready(function(){
 	//Initialize variables.
@@ -18,7 +18,7 @@ $(document).ready(function(){
 	tileBoard = document.getElementById("myCanvas");
 	context = tileBoard.getContext("2d");
 
-	tileImages = new Array(10);
+	tileImages = new Array(11);
 	for(var i = 0; i < tileImages.length; i++)
 	{
 		tileImages[i] = new Image();
