@@ -7,8 +7,8 @@ var rows = 10;
 var cols = 10;
 var mines = 20;
 var board;			//These are intialized together
-var tileFlipper;	//This takes a reference to an initialized board
 var tilesRevealed = new Array();
+var tileFlipper;	//This takes a reference to an initialized board
 
 //I don't know what this does but it doesn't work when I remove it
 var express = require('express');
@@ -25,7 +25,7 @@ var io = require('socket.io')(server);
 //--------------------------------------------
 
 
-
+//Crates a two dimensional array of tiles
 board = new Array(cols);
 for(var i = 0; i < board.length; i++)
 	board[i] = new Array(rows);
@@ -34,6 +34,7 @@ for(var i = 0; i < board.length; i++)
 	for(var j = 0; j < board[i].length; j++)
 		board[i][j] = new Tile(i, j, 0);
 
+//Randomly makes tiles mines
 for(var i = 0; i < mines; i++) {
 	var a = Math.floor(Math.random() * rows);
 	var b = Math.floor(Math.random() * cols);
@@ -94,7 +95,12 @@ io.on('connection', function(socket){
 		console.log('Click recieved at: ' + x +', ' + y + ', Content = ' + board[x][y].content);
 		var revealedTiles = tileFlipper.bigReveal(board[x][y]);
 		tilesRevealed.push.apply(tilesRevealed, revealedTiles);
-		io.emit('boardupdate', {data: revealedTiles});
+		if(board[x][y].content == 9) {
+			socket.broadcast.emit('boardupdate', {data: revealedTiles});
+			socket.emit('boardupdate', {data: [new Tile(x, y, 10)]})
+		} else {
+			io.emit('boardupdate', {data: revealedTiles});
+		}
 	});
 });
 
