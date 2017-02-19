@@ -2,9 +2,9 @@
 Takashi: js file for server
 */
 //Declare variables here.
-var rows = 10;
-var cols = 10;
-var mines = 20;
+var rows = 16;
+var cols = 30;
+var mines = 99;
 var board;			//These are intialized together
 var tilesRevealed = new Array();
 var tileFlipper;	//This takes a reference to an initialized board
@@ -35,8 +35,8 @@ for(var i = 0; i < board.length; i++)
 
 //Randomly makes tiles mines
 for(var i = 0; i < mines; i++) {
-	var a = Math.floor(Math.random() * rows);
-	var b = Math.floor(Math.random() * cols);
+	var a = Math.floor(Math.random() * cols);
+	var b = Math.floor(Math.random() * rows);
 	if(board[a][b].content == 9)
 		i--;
 	else {
