@@ -37,6 +37,7 @@ for(var i = 0; i < board.length; i++)
 for(var i = 0; i < mines; i++) {
 	var a = Math.floor(Math.random() * cols);
 	var b = Math.floor(Math.random() * rows);
+	console.log(a + " " + b);
 	if(board[a][b].content == 9)
 		i--;
 	else {
