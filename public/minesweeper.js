@@ -2,6 +2,8 @@ var socket = io();
 var tileBoard;			//The canvas. Contains the context where we draw stuff.
 var context;			//The image. From canvas.getContext; where we draw tiles.
 
+var board;
+
 var tileWidth = 16;		//Each tile is 16 by 16
 var tileHeight = 16;
 var rows;				//Number of rows. Length of the y axis.
@@ -11,6 +13,7 @@ var tileImages;			//Array of images.
 //0-8 correspond to neighbor counts on empty tiles
 //9 and 10 are mine (also corresponds with tile)
 
+
 $(document).ready(function(){
 	//Initialize variables.
     console.log('jQuery has loaded.');
@@ -18,16 +21,28 @@ $(document).ready(function(){
 	tileBoard = document.getElementById("myCanvas");
 	context = tileBoard.getContext("2d");
 
-	tileImages = new Array(11);
-	for(var i = 0; i < tileImages.length; i++)
+	
+	tileImages = new Array(12);
+	for(var i = 0; i < 11; i++)
 	{
 		tileImages[i] = new Image();
 		tileImages[i].src = "/images/open" + i + ".gif";
 	}
+	tileImages[11] = new Image();
+	tileImages[11].src = "/images/bombflagged.gif";
+	
 	
 	//When we receive rows and columns from server, draw the grid.
     socket.on('settings', function (rows, cols, dataObject) {
+
         console.log("Settings: Rows: " + rows + ' Columns: ' + cols);
+		
+        board = new Array(cols);
+		console.log("Board has " + board.length + " rows");
+        for (var i = 0; i < cols; i++) {
+            board[i] = new Array(rows);
+        }
+		
 		this.rows = rows;
 		this.columns = cols;
 		tileBoard.width = tileWidth * cols;
@@ -79,16 +94,29 @@ function takeClick(mouseEvent)
 	
 	x = Math.floor(x / tileWidth);
 	y = Math.floor(y / tileHeight);
-	
-	
+		
 	//Check if the tile has not been revealed
 	console.log("x: " + x + " y: " + y);
-	//if(true)  //Except, at this point, there is no reveal. :/
-	socket.emit('tileClick', x, y);		//Send x and y of tiles to server
+	
+	if(mouseEvent.button === 0 && board[x][y] === undefined)
+	{
+		socket.emit('tileClick', x, y);		//Send x and y of tiles to server
+	}
+	else if(mouseEvent.button == 2)
+	{
+		if(board[x][y] == 11) {
+            board[x][y] = undefined;
+            context.drawImage(tileImages[0], x * tileWidth, y * tileHeight);
+        } else if(board[x][y] === undefined) {
+            board[x][y] = 11;
+            context.drawImage(tileImages[11], x * tileWidth, y * tileHeight);
+        }
+	}
 }
 
 function drawTile(tile)
 {
+    board[tile.x][tile.y] = tile.content;
 	context.drawImage(tileImages[tile.content], tile.x * tileWidth, tile.y * tileHeight);
 }
 
